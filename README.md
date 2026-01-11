@@ -90,11 +90,6 @@ Ensures first-time setup is automatic — no manual DB entry
 6️⃣ Start the development server
 npm run dev
 
-
-Server runs at http://localhost:3000
-
-Users page: http://localhost:3000/users
-
 7️⃣ App Flow (from user opening page → rendering table)
 
 Browser loads /users
