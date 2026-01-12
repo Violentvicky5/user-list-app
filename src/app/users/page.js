@@ -16,6 +16,7 @@ export default function UsersPage() {
   const [limit, setLimit] = useState(5);
 
   const searchTimeoutRef = useRef(null);
+  const usersCacheRef = useRef(new Map());
 
   const fetchUsers = async ({
     page = 1,
@@ -23,6 +24,18 @@ export default function UsersPage() {
     sortVal = sort,
     limitVal = limit,
   } = {}) => {
+    const cacheKey = `${page}|${searchVal}|${sortVal}|${limitVal}`;
+    console.log("CACHE KEY:", cacheKey);
+
+    if (usersCacheRef.current.has(cacheKey)) {
+      console.log("CACHE HIT");
+      const cachedData = usersCacheRef.current.get(cacheKey);
+      setUsers(cachedData.users);
+      setPagination(cachedData.pagination);
+
+      return;
+    }
+    console.log("CACHE MISS → FETCH:", cacheKey);
     setLoading(true);
     setError(null);
 
@@ -31,7 +44,10 @@ export default function UsersPage() {
         `/api/users?page=${page}&limit=${limitVal}&search=${searchVal}&sort=${sortVal}`
       );
       const data = await res.json();
-
+      usersCacheRef.current.set(cacheKey, {
+        users: data.users,
+        pagination: data.pagination,
+      });
       if (!res.ok) throw new Error(data.error || "Failed to fetch users");
 
       setUsers(data.users);
@@ -56,17 +72,20 @@ export default function UsersPage() {
     }
 
     searchTimeoutRef.current = setTimeout(() => {
+      usersCacheRef.current.clear(); //remove this for search value cache because it clears all cache on every search type
       fetchUsers({ page: 1, searchVal: value });
     }, 500);
   };
 
   const handleSortChange = (e) => {
+    usersCacheRef.current.clear();
     const value = e.target.value;
     setSort(value);
     fetchUsers({ page: 1, sortVal: value });
   };
 
   const handleLimitChange = (e) => {
+    usersCacheRef.current.clear();
     const value = Number(e.target.value);
     setLimit(value);
     fetchUsers({ page: 1, limitVal: value });
@@ -107,12 +126,8 @@ export default function UsersPage() {
       </div>
 
       {/* Status */}
-      {loading && (
-        <p className="text-sm text-gray-500 mb-2">Loading users…</p>
-      )}
-      {error && (
-        <p className="text-sm text-red-500 mb-2">{error}</p>
-      )}
+      {loading && <p className="text-sm text-gray-500 mb-2">Loading users…</p>}
+      {error && <p className="text-sm text-red-500 mb-2">{error}</p>}
 
       {/* Table */}
       <div className="overflow-x-auto border rounded">
@@ -127,10 +142,7 @@ export default function UsersPage() {
           <tbody className="text-sm">
             {!users.length && !loading ? (
               <tr>
-                <td
-                  colSpan={3}
-                  className="px-4 py-6 text-center text-gray-500"
-                >
+                <td colSpan={3} className="px-4 py-6 text-center text-gray-500">
                   No users found
                 </td>
               </tr>
@@ -157,21 +169,15 @@ export default function UsersPage() {
 
         <div className="flex gap-2">
           <button
-            onClick={() =>
-              fetchUsers({ page: pagination.page - 1 })
-            }
+            onClick={() => fetchUsers({ page: pagination.page - 1 })}
             disabled={pagination.page <= 1 || loading}
             className="px-3 py-1 border rounded disabled:opacity-50"
           >
             Previous
           </button>
           <button
-            onClick={() =>
-              fetchUsers({ page: pagination.page + 1 })
-            }
-            disabled={
-              pagination.page >= pagination.totalPages || loading
-            }
+            onClick={() => fetchUsers({ page: pagination.page + 1 })}
+            disabled={pagination.page >= pagination.totalPages || loading}
             className="px-3 py-1 border rounded disabled:opacity-50"
           >
             Next

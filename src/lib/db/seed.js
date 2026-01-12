@@ -7,12 +7,12 @@ async function seed() {
   const users = Array.from({ length: 50 }).map((_, i) => ({
     name: `User ${i + 1}`,
     email: `user${i + 1}@example.com`,
-    createdAt: new Date(Date.now() - i * 1000 * 60),
+    createdAt: new Date(Date.now() - i * 1000 * 60), 
   }));
 
   await db.collection("users").insertMany(users);
 
-  console.log("✅ Seeded 50 users successfully");
+  console.log("Seeded 50 users successfully");
   process.exit(0);
 }
 
