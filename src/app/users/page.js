@@ -15,6 +15,8 @@ export default function UsersPage() {
   const [sort, setSort] = useState("-createdAt");
   const [limit, setLimit] = useState(5);
 
+  const [editingUser, setEditingUser] = useState(null);
+
   const searchTimeoutRef = useRef(null);
   const usersCacheRef = useRef(new Map());
 
@@ -74,7 +76,7 @@ export default function UsersPage() {
     searchTimeoutRef.current = setTimeout(() => {
       usersCacheRef.current.clear(); //remove this for search value cache because it clears all cache on every search type
       fetchUsers({ page: 1, searchVal: value });
-    }, 500);
+    }, 3500);
   };
 
   const handleSortChange = (e) => {
@@ -124,6 +126,68 @@ export default function UsersPage() {
           <option value={20}>20 / page</option>
         </select>
       </div>
+      {/*updtae table*/}
+      {editingUser && (
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+
+            try {
+              const res = await fetch("/api/form", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  id: editingUser._id,
+                  name: editingUser.name,
+                  email: editingUser.email,
+                }),
+              });
+
+              if (!res.ok) throw new Error("Update failed");
+
+              setEditingUser(null);
+              usersCacheRef.current.clear(); // invalidate cache
+              fetchUsers({ page: pagination.page });
+            } catch (err) {
+              alert(err.message);
+            }
+          }}
+          className="mb-6 p-4 border rounded bg-gray-50"
+        >
+          <h2 className="font-medium mb-3">Update User</h2>
+
+          <input
+            className="border px-3 py-2 mr-2"
+            value={editingUser.name}
+            onChange={(e) =>
+              setEditingUser({ ...editingUser, name: e.target.value })
+            }
+          />
+
+          <input
+            className="border px-3 py-2 mr-2"
+            value={editingUser.email}
+            onChange={(e) =>
+              setEditingUser({ ...editingUser, email: e.target.value })
+            }
+          />
+
+          <button
+            type="submit"
+            className="px-3 py-2 bg-blue-600 text-white rounded"
+          >
+            Save
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setEditingUser(null)}
+            className="ml-2 px-3 py-2 border rounded"
+          >
+            Cancel
+          </button>
+        </form>
+      )}
 
       {/* Status */}
       {loading && <p className="text-sm text-gray-500 mb-2">Loading users…</p>}
@@ -137,6 +201,7 @@ export default function UsersPage() {
               <th className="px-4 py-3 text-left">Name</th>
               <th className="px-4 py-3 text-left">Email</th>
               <th className="px-4 py-3 text-left">Created</th>
+              <th className="px-4 py-3 text-left">Actions</th>
             </tr>
           </thead>
           <tbody className="text-sm">
@@ -153,6 +218,14 @@ export default function UsersPage() {
                   <td className="px-4 py-3">{u.email}</td>
                   <td className="px-4 py-3">
                     {new Date(u.createdAt).toLocaleString()}
+                  </td>
+                  <td className="px-4 py-3">
+                    <button
+                      onClick={() => setEditingUser(u)}
+                      className="text-blue-600 hover:underline text-sm"
+                    >
+                      Update
+                    </button>
                   </td>
                 </tr>
               ))
