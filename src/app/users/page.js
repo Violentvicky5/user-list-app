@@ -35,7 +35,7 @@ export default function UsersPage() {
 
       return;
     }
-    console.log("CACHE MISS → FETCH:", cacheKey);
+    console.log("CACHE MISS  FETCH:", cacheKey);
     setLoading(true);
     setError(null);
 
@@ -78,14 +78,14 @@ export default function UsersPage() {
   };
 
   const handleSortChange = (e) => {
-    usersCacheRef.current.clear();
+    usersCacheRef.current.clear(); // remove this for sort value cache because it clears all cache on every sort change
     const value = e.target.value;
     setSort(value);
     fetchUsers({ page: 1, sortVal: value });
   };
 
   const handleLimitChange = (e) => {
-    usersCacheRef.current.clear();
+    usersCacheRef.current.clear(); // remove this for limit value cache because it clears all cache on every limit change
     const value = Number(e.target.value);
     setLimit(value);
     fetchUsers({ page: 1, limitVal: value });
