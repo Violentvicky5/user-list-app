@@ -17,6 +17,9 @@ export default function UsersPage() {
 
   const [editingUser, setEditingUser] = useState(null);
 
+  const [assignWork, setAssignWork] = useState({});
+  // console.log("Assigned Work:", assignWork);
+
   const searchTimeoutRef = useRef(null);
   const usersCacheRef = useRef(new Map());
 
@@ -92,6 +95,40 @@ export default function UsersPage() {
     setLimit(value);
     fetchUsers({ page: 1, limitVal: value });
   };
+
+ const handleAssignWork = async (userId, work) => {
+  const ok = window.confirm(
+    work
+      ? `Assign ${work} to this user?`
+      : "Remove assigned work from this user?"
+  );
+
+  if (!ok) return;
+
+  try {
+    const res = await fetch("/api/users/assign-work", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: userId,
+        assignedWork: work, // "" for No Work
+      }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Assign work failed");
+
+    // optional UI state (not source of truth)
+    setAssignWork((prev) => ({ ...prev, [userId]: work }));
+
+    // 🔴 REQUIRED
+    usersCacheRef.current.clear();
+    fetchUsers({ page: pagination.page });
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
 
   return (
     <div className="max-w-6xl mx-auto mt-10 p-4">
@@ -202,6 +239,7 @@ export default function UsersPage() {
               <th className="px-4 py-3 text-left">Email</th>
               <th className="px-4 py-3 text-left">Created</th>
               <th className="px-4 py-3 text-left">Actions</th>
+              <th className="px-4 py-3 text-left">Assign Work </th>
             </tr>
           </thead>
           <tbody className="text-sm">
@@ -226,6 +264,24 @@ export default function UsersPage() {
                     >
                       Update
                     </button>
+                  </td>
+                  <td className="px-4 py-3">
+                    <select
+                      value={u.assignedWork || "select_work"}
+                      onChange={(e) => {
+                        if (e.target.value === "select_work") return;
+                        handleAssignWork(u._id, e.target.value);
+                      }}
+                      className="border rounded px-2 py-1 text-sm"
+                    >
+                      <option value="select_work" disabled>
+                        Select Work
+                      </option>
+                      <option value="">No Work</option>
+                      <option value="work1">Work 1</option>
+                      <option value="work2">Work 2</option>
+                      <option value="work3">Work 3</option>
+                    </select>
                   </td>
                 </tr>
               ))
