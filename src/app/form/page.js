@@ -7,11 +7,20 @@ export default function AddUserForm() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [status, setStatus] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
+
+    //ux change for better readability
+    if (!name || !email) {
+      setStatus("error");
+      setMessage("Please provide both name and email.");
+      setLoading(false);
+      return;
+    }
 
     try {
       const res = await fetch("/api/form", {
@@ -27,7 +36,10 @@ export default function AddUserForm() {
       setMessage("User added successfully with ID: " + data.id);
       setName("");
       setEmail("");
+      setStatus("success");
+      setMessage("User added successfully with ID: " + data.id);
     } catch (err) {
+      setStatus("error");
       setMessage(err.message);
     } finally {
       setLoading(false);
@@ -39,7 +51,11 @@ export default function AddUserForm() {
       <h2 className="text-xl font-semibold mb-4">Add User</h2>
 
       {message && (
-        <p className={`mb-4 ${message.includes("success") ? "text-green-600" : "text-red-600"}`}>
+        <p
+          className={`mb-4 ${
+            message.includes("success") ? "text-green-600" : "text-red-600"
+          }`}
+        >
           {message}
         </p>
       )}
@@ -50,9 +66,18 @@ export default function AddUserForm() {
           <input
             type="text"
             value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={(e) => {
+              setName(e.target.value);
+              setStatus(null);
+              setMessage("");
+            }}
+            className={`w-full rounded px-3 py-2 focus:outline-none focus:ring-2
+    ${
+      status === "error"
+        ? "border border-red-500 focus:ring-red-400"
+        : "border border-gray-300 focus:ring-blue-500"
+    }
+  `}
           />
         </div>
 
@@ -61,9 +86,18 @@ export default function AddUserForm() {
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setStatus(null);
+              setMessage("");
+            }}
+            className={`w-full rounded px-3 py-2 focus:outline-none focus:ring-2
+    ${
+      status === "error"
+        ? "border border-red-500 focus:ring-red-400"
+        : "border border-gray-300 focus:ring-blue-500"
+    }
+  `}
           />
         </div>
 
