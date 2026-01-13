@@ -53,10 +53,7 @@ export default function WorkTablePage() {
           <tbody className="text-sm">
             {!works.length && !loading ? (
               <tr>
-                <td
-                  colSpan={5}
-                  className="px-4 py-6 text-center text-gray-500"
-                >
+                <td colSpan={5} className="px-4 py-6 text-center text-gray-500">
                   No assigned works found
                 </td>
               </tr>
@@ -68,7 +65,9 @@ export default function WorkTablePage() {
                   <td className="px-4 py-3">{w.username}</td>
                   <td className="px-4 py-3">{w.work}</td>
                   <td className="px-4 py-3">
-                    {new Date(w.createdAt).toLocaleString()}
+                    {w.assignedAt
+                      ? new Date(w.assignedAt).toLocaleString()
+                      : "N/A"}
                   </td>
                 </tr>
               ))

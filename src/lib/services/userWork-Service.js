@@ -6,49 +6,33 @@ export async function assignWorkToUser(userId, assignedWork) {
   const client = await clientPromise;
   const db = client.db();
 
-  // Handle NO work
-  if (!assignedWork) {
+  const userObjectId = new ObjectId(userId);
+
+  if (!assignedWork || assignedWork.length === 0) {
     await db.collection("users").updateOne(
-      { _id: new ObjectId(userId) },
+      { _id: userObjectId },
       { $unset: { assignedWork: "" } }
     );
-
-    // remove from userWorks table
-    await db.collection("userWorks").deleteOne({
-      userId: new ObjectId(userId),
-    });
-
     return { matchedCount: 1 };
   }
 
-  //Fetch user name to use in userWorks collection
   const user = await db.collection("users").findOne(
-    { _id: new ObjectId(userId) },
-    { projection: { name: 1 } }
+    { _id: userObjectId },
+    { projection: { _id: 1 } }
   );
 
   if (!user) return { matchedCount: 0 };
 
-  //Update assignedWork in users collection
-  await db.collection("users").updateOne(
-    { _id: new ObjectId(userId) },
-    { $set: { assignedWork } }
-  );
+  // Add DB-only fields
+  const worksToSave = assignedWork.map((w) => ({
+    ...w,
+    workId: generateWorkId(),
+    assignedAt: new Date(),
+  }));
 
-  // Upsert into userWorks to avoid duplicates
-  await db.collection("userWorks").updateOne(
-    { userId: new ObjectId(userId) }, // find by userId
-    {
-      $set: {
-        username: user.name,
-        work: assignedWork,
-        createdAt: new Date(),
-      },
-      $setOnInsert: {
-        workId: generateWorkId(), // generate only if new
-      },
-    },
-    { upsert: true } // insert if does not exist
+  await db.collection("users").updateOne(
+    { _id: userObjectId },
+    { $set: { assignedWork: worksToSave } }
   );
 
   return { matchedCount: 1 };
