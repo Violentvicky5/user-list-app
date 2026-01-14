@@ -5,9 +5,7 @@ import { removeWorkFromUser } from "@/lib/services/removeUser";
 import { rateLimit } from "@/lib/rateLimiter/rateLimit";
 import clientPromise from "@/lib/db/mongo";
 
-/**
- * GET → fetch users with assigned work
- */
+/*GET  fetch users with assigned work*/
 export async function GET() {
   try {
     const client = await clientPromise;
@@ -16,30 +14,29 @@ export async function GET() {
     const users = await db
       .collection("users")
       .find({ assignedWork: { $exists: true, $ne: [] } })
-      .project({ name: 1, assignedWork: 1 })
-      .sort({ "assignedWork.assignedAt": -1 })
+      .project({
+        name: 1,
+        assignedWork: 1,
+      })
+      .sort({ createdAt: -1 })
       .toArray();
 
-    // flatten assignedWork for table
-   const works = users.flatMap((user) => {
-  // ensure it's always an array
-  const assigned = Array.isArray(user.assignedWork) ? user.assignedWork : [user.assignedWork];
-  
-  return assigned.map((work) => ({
-    workId: work.workId,
-    userId: user._id,
-    username: user.name,
-    work: work.name,
-    assignedAt: work.assignedAt,
-  }));
-});
-
+    const works = users.map((user) => ({
+      userId: user._id,
+      username: user.name,
+      works: user.assignedWork.map((w) => ({
+        workId: w.workId,
+        name: w.name,
+        assignedAt: w.assignedAt,
+      })),
+    }));
 
     return NextResponse.json({ works });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
+
 
 /**
  * POST → assign / remove work

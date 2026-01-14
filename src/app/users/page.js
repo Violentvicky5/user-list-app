@@ -25,6 +25,13 @@ export default function UsersPage() {
   const searchTimeoutRef = useRef(null);
   const usersCacheRef = useRef(new Map());
 
+  const WORK_OPTIONS = [
+  { label: "Branch 1", value: "work1" },
+  { label: "Branch 2", value: "work2" },
+  { label: "Branch 3", value: "work3" },
+];
+
+
   const fetchUsers = async ({
     page = 1,
     searchVal = search,
@@ -98,40 +105,34 @@ export default function UsersPage() {
     fetchUsers({ page: 1, limitVal: value });
   };
 
-  const handleAssignWork = async (userId, work) => {
-    const isRemoving = Array.isArray(work) && work.length === 0;
-    const confirmMsg = isRemoving
-      ? "Remove assigned work from this user?"
-      : `Assign ${work[0].name} to this user?`;
+ const handleAssignWork = async (userId, work, actionLabel) => {
+  const ok = window.confirm(actionLabel);
+  if (!ok) return;
 
-    const ok = window.confirm(confirmMsg);
-    if (!ok) return;
+  try {
+    const res = await fetch("/api/users/assign-work", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: userId,
+        assignedWork: work,
+      }),
+    });
 
-    try {
-      const res = await fetch("/api/users/assign-work", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: userId,
-          assignedWork: work, // [] for No Work
-        }),
-      });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Assign work failed");
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Assign work failed");
+    setUsers((prev) =>
+      prev.map((u) => (u._id === userId ? { ...u, assignedWork: work } : u))
+    );
 
-      // Optional UI state update
-      setUsers((prev) =>
-        prev.map((u) => (u._id === userId ? { ...u, assignedWork: work } : u))
-      );
+    usersCacheRef.current.clear();
+    fetchUsers({ page: pagination.page });
+  } catch (err) {
+    alert(err.message);
+  }
+};
 
-      // Clear cache and refetch
-      usersCacheRef.current.clear();
-      fetchUsers({ page: pagination.page });
-    } catch (err) {
-      alert(err.message);
-    }
-  };
 
   return (
     <div className="max-w-6xl mx-auto mt-10 p-4">
@@ -275,26 +276,44 @@ export default function UsersPage() {
                     </button>
                   </td>
                   <td className="px-4 py-3">
-                    <select
-                      value={u.assignedWork?.[0]?.name || "select_work"}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        if (val === "select_work") return;
+  <div className="flex gap-3">
+    {WORK_OPTIONS.map((work) => {
+      const selectedWorks = u.assignedWork?.map((w) => w.name) || [];
+      const isChecked = selectedWorks.includes(work.value);
 
-                        const workToAssign = val === "" ? [] : [{ name: val }];
-                        handleAssignWork(u._id, workToAssign);
-                      }}
-                      className="border rounded px-2 py-1 text-sm"
-                    >
-                      <option value="select_work" disabled>
-                        Select Branch
-                      </option>
-                      <option value="">No Branch</option>
-                      <option value="work1">Branch 1</option>
-                      <option value="work2">Branch 2</option>
-                      <option value="work3">Branch 3</option>
-                    </select>
-                  </td>
+      const onToggle = () => {
+        const updatedWorks = isChecked
+          ? selectedWorks.filter((v) => v !== work.value)
+          : [...selectedWorks, work.value];
+
+        const confirmMsg = isChecked
+          ? `Remove ${work.label} from this user?`
+          : `Assign ${work.label} to this user?`;
+
+        handleAssignWork(
+          u._id,
+          updatedWorks.map((name) => ({ name })),
+          confirmMsg
+        );
+      };
+
+      return (
+        <label
+          key={work.value}
+          className="flex items-center gap-1 text-sm"
+        >
+          <input
+            type="checkbox"
+            checked={isChecked}
+            onChange={onToggle}
+          />
+          {work.label}
+        </label>
+      );
+    })}
+  </div>
+</td>
+
                 </tr>
               ))
             )}

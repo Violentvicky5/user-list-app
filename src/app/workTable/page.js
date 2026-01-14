@@ -14,6 +14,7 @@ export default function WorkTablePage() {
     try {
       const res = await fetch("/api/users/assign-work");
       const data = await res.json();
+      console.log("Fetched works data:", data);
 
       if (!res.ok) {
         throw new Error(data.error || "Failed to fetch work data");
@@ -45,34 +46,39 @@ export default function WorkTablePage() {
               <th className="px-4 py-3 text-left">Work ID</th>
               <th className="px-4 py-3 text-left">User ID</th>
               <th className="px-4 py-3 text-left">Username</th>
-              <th className="px-4 py-3 text-left">Work</th>
-              <th className="px-4 py-3 text-left">Assigned At</th>
+              <th className="px-4 py-3 text-left">Created At</th>
             </tr>
           </thead>
 
-          <tbody className="text-sm">
-            {!works.length && !loading ? (
-              <tr>
-                <td colSpan={5} className="px-4 py-6 text-center text-gray-500">
-                  No assigned works found
-                </td>
-              </tr>
-            ) : (
-              works.map((w) => (
-                <tr key={w._id} className="border-t hover:bg-gray-50">
-                  <td className="px-4 py-3">{w.workId}</td>
-                  <td className="px-4 py-3">{String(w.userId)}</td>
-                  <td className="px-4 py-3">{w.username}</td>
-                  <td className="px-4 py-3">{w.work}</td>
-                  <td className="px-4 py-3">
-                    {w.assignedAt
-                      ? new Date(w.assignedAt).toLocaleString()
-                      : "N/A"}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
+         <tbody className="text-sm">
+  {!works.length && !loading ? (
+    <tr>
+      <td colSpan={4} className="px-4 py-6 text-center text-gray-500">
+        No assigned works found
+      </td>
+    </tr>
+  ) : (
+    works.map((u) => (
+      <tr key={u.userId} className="border-t hover:bg-gray-50">
+        <td className="px-4 py-3">{u.userId}</td>
+        <td className="px-4 py-3">{u.username}</td>
+
+        {/* Works */}
+        <td className="px-4 py-3">
+          {u.works.map((w) => w.name).join(", ")}
+        </td>
+
+        {/* Assigned At (latest) */}
+        <td className="px-4 py-3">
+          {u.works[0]?.assignedAt
+            ? new Date(u.works[0].assignedAt).toLocaleString()
+            : "N/A"}
+        </td>
+      </tr>
+    ))
+  )}
+</tbody>
+
         </table>
       </div>
     </div>
