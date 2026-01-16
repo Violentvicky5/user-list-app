@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex`}
       >
-        {/* Sidebar */}
+       
         <aside
           className={`
     fixed top-0 left-0 h-screen w-64 bg-gray-900 text-white z-40
@@ -37,6 +37,12 @@ export default function RootLayout({ children }) {
           </div>
 
           <nav className="p-4 space-y-2">
+            <Link
+              href="/home"
+              className="block px-3 py-2 rounded hover:bg-gray-700"
+            >
+              Home
+            </Link>
             <Link
               href="/users"
               className="block px-3 py-2 rounded hover:bg-gray-700"

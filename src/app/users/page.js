@@ -26,11 +26,10 @@ export default function UsersPage() {
   const usersCacheRef = useRef(new Map());
 
   const WORK_OPTIONS = [
-  { label: "Branch 1", value: "work1" },
-  { label: "Branch 2", value: "work2" },
-  { label: "Branch 3", value: "work3" },
-];
-
+    { label: "Branch 1", value: "work1" },
+    { label: "Branch 2", value: "work2" },
+    { label: "Branch 3", value: "work3" },
+  ];
 
   const fetchUsers = async ({
     page = 1,
@@ -105,34 +104,33 @@ export default function UsersPage() {
     fetchUsers({ page: 1, limitVal: value });
   };
 
- const handleAssignWork = async (userId, work, actionLabel) => {
-  const ok = window.confirm(actionLabel);
-  if (!ok) return;
+  const handleAssignWork = async (userId, work, actionLabel) => {
+   const ok = window.confirm(actionLabel);
+    if (!ok) return;
 
-  try {
-    const res = await fetch("/api/users/assign-work", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: userId,
-        assignedWork: work,
-      }),
-    });
+    try {
+      const res = await fetch("/api/users/assign-work", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: userId,
+          assignedWork: work,
+        }),
+      });
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Assign work failed");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Assign work failed");
 
-    setUsers((prev) =>
-      prev.map((u) => (u._id === userId ? { ...u, assignedWork: work } : u))
-    );
+      setUsers((prev) =>
+        prev.map((u) => (u._id === userId ? { ...u, assignedWork: work } : u))
+      );
 
-    usersCacheRef.current.clear();
-    fetchUsers({ page: pagination.page });
-  } catch (err) {
-    alert(err.message);
-  }
-};
-
+      usersCacheRef.current.clear();
+      fetchUsers({ page: pagination.page });
+    } catch (err) {
+      alert(err.message);
+    }
+  };
 
   return (
     <div className="max-w-6xl mx-auto mt-10 p-4">
@@ -264,56 +262,54 @@ export default function UsersPage() {
                   <td className="px-4 py-3">
                     <button
                       onClick={() => setEditingUser(u)}
-                      className="text-blue-600 hover:underline text-sm"
+                      className="text-blue-600 hover:underline text-sm "
                     >
                       Update
                     </button>
                     <button
                       onClick={() => router.push(`/users/${u._id}`)}
-                      className="text-green-600 hover:underline text-sm"
+                      className="text-green-600 hover:underline text-sm m-2"
                     >
                       View
                     </button>
                   </td>
                   <td className="px-4 py-3">
-  <div className="flex gap-3">
-    {WORK_OPTIONS.map((work) => {
-      const selectedWorks = u.assignedWork?.map((w) => w.name) || [];
-      const isChecked = selectedWorks.includes(work.value);
+                    <div className="flex gap-3">
+                      {WORK_OPTIONS.map((work) => {
 
-      const onToggle = () => {
-        const updatedWorks = isChecked
-          ? selectedWorks.filter((v) => v !== work.value)
-          : [...selectedWorks, work.value];
+                        const selectedWorks = u.assignedWork?.map((w) => w.name) || [];
+                        const isChecked = selectedWorks.includes(work.value);
 
-        const confirmMsg = isChecked
-          ? `Remove ${work.label} from this user?`
-          : `Assign ${work.label} to this user?`;
+                        const onToggle = () => {
+                          const updatedWorks = isChecked? selectedWorks.filter((v) => v !== work.value) : [...selectedWorks, work.value];
 
-        handleAssignWork(
-          u._id,
-          updatedWorks.map((name) => ({ name })),
-          confirmMsg
-        );
-      };
+                          const confirmMsg = isChecked
+                            ? `Remove ${work.label} from this user?`
+                            : `Assign ${work.label} to this user?`;
 
-      return (
-        <label
-          key={work.value}
-          className="flex items-center gap-1 text-sm"
-        >
-          <input
-            type="checkbox"
-            checked={isChecked}
-            onChange={onToggle}
-          />
-          {work.label}
-        </label>
-      );
-    })}
-  </div>
-</td>
+                          handleAssignWork(
+                            u._id,
+                            updatedWorks.map((name) => ({ name })),
+                            confirmMsg
+                          );
+                        };
 
+                        return (
+                          <label
+                            key={work.value}
+                            className="flex items-center gap-1 text-sm"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={onToggle}
+                            />
+                            {work.label}
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </td>
                 </tr>
               ))
             )}
