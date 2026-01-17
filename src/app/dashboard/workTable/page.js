@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 export default function WorkTablePage() {
   const [works, setWorks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const fetchWorks = async () => {
     setLoading(true);
     setError(null);
@@ -32,6 +34,9 @@ export default function WorkTablePage() {
     fetchWorks();
   }, []);
 
+if (status === "loading") return null;
+
+
   return (
     <div className="max-w-6xl mx-auto mt-10 p-4">
       <h1 className="text-2xl font-semibold mb-6">Assigned Works</h1>
@@ -50,35 +55,34 @@ export default function WorkTablePage() {
             </tr>
           </thead>
 
-         <tbody className="text-sm">
-  {!works.length && !loading ? (
-    <tr>
-      <td colSpan={4} className="px-4 py-6 text-center text-gray-500">
-        No assigned works found
-      </td>
-    </tr>
-  ) : (
-    works.map((u) => (
-      <tr key={u.userId} className="border-t hover:bg-gray-50">
-        <td className="px-4 py-3">{u.userId}</td>
-        <td className="px-4 py-3">{u.username}</td>
+          <tbody className="text-sm">
+            {!works.length && !loading ? (
+              <tr>
+                <td colSpan={4} className="px-4 py-6 text-center text-gray-500">
+                  No assigned works found
+                </td>
+              </tr>
+            ) : (
+              works.map((u) => (
+                <tr key={u.userId} className="border-t hover:bg-gray-50">
+                  <td className="px-4 py-3">{u.userId}</td>
+                  <td className="px-4 py-3">{u.username}</td>
 
-        {/* Works */}
-        <td className="px-4 py-3">
-          {u.works.map((w) => w.name).join(", ")}
-        </td>
+                  {/* Works */}
+                  <td className="px-4 py-3">
+                    {u.works.map((w) => w.name).join(", ")}
+                  </td>
 
-        {/* Assigned At (latest) */}
-        <td className="px-4 py-3">
-          {u.works[0]?.assignedAt
-            ? new Date(u.works[0].assignedAt).toLocaleString()
-            : "N/A"}
-        </td>
-      </tr>
-    ))
-  )}
-</tbody>
-
+                  {/* Assigned At (latest) */}
+                  <td className="px-4 py-3">
+                    {u.works[0]?.assignedAt
+                      ? new Date(u.works[0].assignedAt).toLocaleString()
+                      : "N/A"}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
         </table>
       </div>
     </div>

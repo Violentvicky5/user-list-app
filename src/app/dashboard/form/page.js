@@ -1,13 +1,22 @@
 "use client";
 
-import { useState } from "react";
-
+import { useState,useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 export default function AddUserForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [status, setStatus] = useState(null);
+  const [inputStatus, setInputStatus] = useState(null);
+  const { data: session, status } = useSession();
+  
+    const router = useRouter();
+  
+   
+  
+if (status === "loading") return null;
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,7 +25,7 @@ export default function AddUserForm() {
 
     //ux change for better readability
     if (!name || !email) {
-      setStatus("error");
+      setInputStatus("error");
       setMessage("Please provide both name and email.");
       setLoading(false);
       return;
@@ -36,10 +45,10 @@ export default function AddUserForm() {
       setMessage("User added successfully with ID: " + data.id);
       setName("");
       setEmail("");
-      setStatus("success");
+      setInputStatus("success");
       setMessage("User added successfully with ID: " + data.id);
     } catch (err) {
-      setStatus("error");
+      setInputStatus("error");
       setMessage(err.message);
     } finally {
       setLoading(false);
@@ -68,12 +77,12 @@ export default function AddUserForm() {
             value={name}
             onChange={(e) => {
               setName(e.target.value);
-              setStatus(null);
+              setInputStatus(null);
               setMessage("");
             }}
             className={`w-full rounded px-3 py-2 focus:outline-none focus:ring-2
     ${
-      status === "error"
+      inputStatus === "error"
         ? "border border-red-500 focus:ring-red-400"
         : "border border-gray-300 focus:ring-blue-500"
     }
@@ -88,12 +97,12 @@ export default function AddUserForm() {
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
-              setStatus(null);
+              setInputStatus(null);
               setMessage("");
             }}
             className={`w-full rounded px-3 py-2 focus:outline-none focus:ring-2
     ${
-      status === "error"
+      inputStatus === "error"
         ? "border border-red-500 focus:ring-red-400"
         : "border border-gray-300 focus:ring-blue-500"
     }

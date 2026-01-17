@@ -19,20 +19,23 @@ export default function UserSummaryPie({ summary }) {
       ],
       textinfo: "label+percent",
       hoverinfo: "label+value",
-      hole: 0.4,
+      hole: 0.3,
     },
   ];
 
-  const layout = {
-    title: "User Work Distribution",
-    legend: {
-      orientation: "v",
-      x: 1,
-      y: 0.5,
-    },
-    margin: { t: 50, l: 0, r: 0, b: 0 },
-    responsive: true,
-  };
+ const layout = {
+  title: {
+    text: "User Work Distribution",
+    xanchor: "right",
+    font: { size: 18 },
+  },
+  legend: {
+    orientation: "h",
+    x: 1,
+    y: 0.5,
+  },
+  margin: { t: 80, l: 0, r: 0, b: 0 },
+};
 
   return (
     <Plot

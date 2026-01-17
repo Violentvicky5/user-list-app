@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-
+import { useSession } from "next-auth/react";
 export default function UsersPage() {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [users, setUsers] = useState([]);
   const [pagination, setPagination] = useState({
@@ -24,6 +25,10 @@ export default function UsersPage() {
 
   const searchTimeoutRef = useRef(null);
   const usersCacheRef = useRef(new Map());
+
+
+
+
 
   const WORK_OPTIONS = [
     { label: "Branch 1", value: "work1" },
@@ -71,7 +76,7 @@ export default function UsersPage() {
       setLoading(false);
     }
   };
-
+  
   useEffect(() => {
     fetchUsers({ page: 1 });
   }, []);
@@ -131,6 +136,8 @@ export default function UsersPage() {
       alert(err.message);
     }
   };
+
+  if (status === "loading") return null;
 
   return (
     <div className="max-w-6xl mx-auto mt-10 p-4">
