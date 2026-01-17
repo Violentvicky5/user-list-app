@@ -274,7 +274,7 @@ export default function UsersPage() {
                       Update
                     </button>
                     <button
-                      onClick={() => router.push(`/users/${u._id}`)}
+                      onClick={() => router.push(`/dashboard/users/${u._id}`)}
                       className="text-green-600 hover:underline text-sm m-2"
                     >
                       View
