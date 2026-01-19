@@ -1,8 +1,10 @@
 "use client";
 
-import { useState,useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import Breadcrumb from "@/components/BreadCrumb";
+
 export default function AddUserForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -10,20 +12,15 @@ export default function AddUserForm() {
   const [message, setMessage] = useState("");
   const [inputStatus, setInputStatus] = useState(null);
   const { data: session, status } = useSession();
-  
-    const router = useRouter();
-  
-   
-  
-if (status === "loading") return null;
+  const router = useRouter();
 
+  if (status === "loading") return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
-    //ux change for better readability
     if (!name || !email) {
       setInputStatus("error");
       setMessage("Please provide both name and email.");
@@ -42,7 +39,6 @@ if (status === "loading") return null;
 
       if (!res.ok) throw new Error(data.error || "Failed to add user");
 
-      setMessage("User added successfully with ID: " + data.id);
       setName("");
       setEmail("");
       setInputStatus("success");
@@ -57,6 +53,9 @@ if (status === "loading") return null;
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+      {/* Breadcrumb */}
+      <Breadcrumb />
+
       <h2 className="text-xl font-semibold mb-4">Add User</h2>
 
       {message && (
@@ -80,13 +79,11 @@ if (status === "loading") return null;
               setInputStatus(null);
               setMessage("");
             }}
-            className={`w-full rounded px-3 py-2 focus:outline-none focus:ring-2
-    ${
-      inputStatus === "error"
-        ? "border border-red-500 focus:ring-red-400"
-        : "border border-gray-300 focus:ring-blue-500"
-    }
-  `}
+            className={`w-full rounded px-3 py-2 focus:outline-none focus:ring-2 ${
+              inputStatus === "error"
+                ? "border border-red-500 focus:ring-red-400"
+                : "border border-gray-300 focus:ring-blue-500"
+            }`}
           />
         </div>
 
@@ -100,13 +97,11 @@ if (status === "loading") return null;
               setInputStatus(null);
               setMessage("");
             }}
-            className={`w-full rounded px-3 py-2 focus:outline-none focus:ring-2
-    ${
-      inputStatus === "error"
-        ? "border border-red-500 focus:ring-red-400"
-        : "border border-gray-300 focus:ring-blue-500"
-    }
-  `}
+            className={`w-full rounded px-3 py-2 focus:outline-none focus:ring-2 ${
+              inputStatus === "error"
+                ? "border border-red-500 focus:ring-red-400"
+                : "border border-gray-300 focus:ring-blue-500"
+            }`}
           />
         </div>
 

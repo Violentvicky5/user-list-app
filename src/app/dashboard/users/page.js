@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import Breadcrumb from "@/components/BreadCrumb";
 export default function UsersPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -137,6 +138,7 @@ export default function UsersPage() {
 
   return (
     <div className="max-w-6xl mx-auto mt-10 p-4">
+      <Breadcrumb />
       <h1 className="text-2xl font-semibold mb-6">Users</h1>
 
       {/* Controls */}

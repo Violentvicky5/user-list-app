@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import Breadcrumb from "@/components/BreadCrumb";
 export default function WorkTablePage() {
   const [works, setWorks] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -10,80 +11,79 @@ export default function WorkTablePage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [page, setPage] = useState(1);
-const [limit, setLimit] = useState(5);
-const [search, setSearch] = useState("");
-const [sort, setSort] = useState("-createdAt");
- const worksCacheRef = useRef(new Map());
-const [pagination, setPagination] = useState({
-  page: 1,
-  limit: 5,
-  total: 0,
-  totalPages: 0,
-});
+  const [limit, setLimit] = useState(5);
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("-createdAt");
+  const worksCacheRef = useRef(new Map());
 
-const handlePrev = () => {
-  if (page > 1) {
-    setPage((p) => p - 1);
-  }
-};
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 5,
+    total: 0,
+    totalPages: 0,
+  });
 
-const handleNext = () => {
-  if (page < pagination.totalPages) {
-    setPage((p) => p + 1);
-  }
-};
+  const handlePrev = () => {
+    if (page > 1) {
+      setPage((p) => p - 1);
+    }
+  };
 
-const cacheKey = `${page}_${limit}_${search}_${sort}`;
+  const handleNext = () => {
+    if (page < pagination.totalPages) {
+      setPage((p) => p + 1);
+    }
+  };
 
- const fetchWorks = async () => {
-  setLoading(true);
-  setError(null);
+  const cacheKey = `${page}_${limit}_${search}_${sort}`;
 
-  // from cache process
-  if (worksCacheRef.current.has(cacheKey)) {
-    const cached = worksCacheRef.current.get(cacheKey);
-    setWorks(cached.works);
-    setPagination(cached.pagination);
-    setLoading(false);
-    return;
-  }
+  const fetchWorks = async () => {
+    setLoading(true);
+    setError(null);
 
-  try {
-    const res = await fetch(
-      `/api/users/assign-work?page=${page}&limit=${limit}&search=${search}&sort=${sort}`
-    );
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.error || "Failed to fetch work data");
+    // from cache process
+    if (worksCacheRef.current.has(cacheKey)) {
+      const cached = worksCacheRef.current.get(cacheKey);
+      setWorks(cached.works);
+      setPagination(cached.pagination);
+      setLoading(false);
+      return;
     }
 
-    // store in cache
-    worksCacheRef.current.set(cacheKey, {
-      works: data.works || [],
-      pagination: data.pagination,
-    });
+    try {
+      const res = await fetch(
+        `/api/users/assign-work?page=${page}&limit=${limit}&search=${search}&sort=${sort}`,
+      );
+      const data = await res.json();
 
-    setWorks(data.works || []);
-    setPagination(data.pagination);
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-};
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch work data");
+      }
 
+      // store in cache
+      worksCacheRef.current.set(cacheKey, {
+        works: data.works || [],
+        pagination: data.pagination,
+      });
 
+      setWorks(data.works || []);
+      setPagination(data.pagination);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchWorks();
   }, [page, limit, search, sort]);
 
-if (status === "loading") return null;
-
+  if (status === "loading") return null;
 
   return (
     <div className="max-w-6xl mx-auto mt-10 p-4">
+      <Breadcrumb />
       <h1 className="text-2xl font-semibold mb-6">Assigned Works</h1>
 
       {loading && <p className="text-sm text-gray-500">Loading works…</p>}
@@ -129,32 +129,30 @@ if (status === "loading") return null;
             )}
           </tbody>
         </table>
-        
       </div>
       {pagination.totalPages > 1 && (
-  <div className="flex items-center justify-between mt-4 text-sm">
-    <button
-      onClick={handlePrev}
-      disabled={page === 1}
-      className="px-3 py-1 border rounded disabled:opacity-50"
-    >
-      Prev
-    </button>
+        <div className="flex items-center justify-between mt-4 text-sm">
+          <button
+            onClick={handlePrev}
+            disabled={page === 1}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            Prev
+          </button>
 
-    <span>
-      Page {pagination.page} of {pagination.totalPages}
-    </span>
+          <span>
+            Page {pagination.page} of {pagination.totalPages}
+          </span>
 
-    <button
-      onClick={handleNext}
-      disabled={page === pagination.totalPages}
-      className="px-3 py-1 border rounded disabled:opacity-50"
-    >
-      Next
-    </button>
-  </div>
-)}
-
+          <button
+            onClick={handleNext}
+            disabled={page === pagination.totalPages}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

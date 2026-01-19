@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-
+import Breadcrumb from "@/components/BreadCrumb";
 export default function UserDetailPage() {
   const { id } = useParams(); // get dynamic id from URL
   const router = useRouter();
@@ -10,7 +10,7 @@ export default function UserDetailPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+ const usernameMap = user? { [id]: user.name }: {};
   useEffect(() => {
     if (!id) return;
 
@@ -39,7 +39,11 @@ export default function UserDetailPage() {
   if (!user) return <p className="p-4 text-gray-500">User not found</p>;
 
   return (
+    <div>
+      <Breadcrumb usernameMap={usernameMap} />
     <div className="max-w-3xl mx-auto mt-10 p-4 border rounded">
+      
+
       <h1 className="text-2xl font-semibold mb-4">User Details</h1>
       <p><strong>Name:</strong> {user.name}</p>
       <p><strong>Email:</strong> {user.email}</p>
@@ -85,5 +89,6 @@ export default function UserDetailPage() {
         Back
       </button>
     </div>
+  </div>
   );
 }

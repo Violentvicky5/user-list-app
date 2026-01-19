@@ -29,6 +29,9 @@ export default function DashboardLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex`}
     >
       <aside
+       onMouseLeave={() => {
+    if (open) setOpen(false);
+  }}
         className={`
     fixed top-0 left-0 h-screen w-64 bg-gray-900 text-white z-40
     transform transition-transform duration-200
