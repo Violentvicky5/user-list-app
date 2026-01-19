@@ -3,39 +3,39 @@ import { userSchema } from "@/lib/validators/userValidator";
 import { assignWorkToUser } from "@/lib/services/userWork-Service";
 import { removeWorkFromUser } from "@/lib/services/removeUser";
 import { rateLimit } from "@/lib/rateLimiter/rateLimit";
-import clientPromise from "@/lib/db/mongo";
+import { validateUserQuery } from "@/lib/validators/user.query";
+import { getAssignedWorks } from "@/lib/services/assignedWork.service";
 
-/*GET  fetch users with assigned work*/
-export async function GET() {
+export async function GET(request) {
   try {
-    const client = await clientPromise;
-    const db = client.db();
+    const { searchParams } = new URL(request.url);
 
-    const users = await db
-      .collection("users")
-      .find({ assignedWork: { $exists: true, $ne: [] } })
-      .project({
-        name: 1,
-        assignedWork: 1,
-      })
-      .sort({ createdAt: -1 })
-      .toArray();
+    const rawPage = searchParams.get("page");
+    const rawLimit = searchParams.get("limit");
+    const search = searchParams.get("search") || "";
+    const sort = searchParams.get("sort") || "-createdAt";
 
-    const works = users.map((user) => ({
-      userId: user._id,
-      username: user.name,
-      works: user.assignedWork.map((w) => ({
-        workId: w.workId,
-        name: w.name,
-        assignedAt: w.assignedAt,
-      })),
-    }));
+    const { page, limit } = validateUserQuery({
+      page: rawPage,
+      limit: rawLimit,
+    });
 
-    return NextResponse.json({ works });
+    const result = await getAssignedWorks({
+      page,
+      limit,
+      search,
+      sort,
+    });
+
+    return NextResponse.json(result);
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json(
+      { error: "Unable to fetch assigned works" },
+      { status: 500 }
+    );
   }
 }
+
 
 
 /**

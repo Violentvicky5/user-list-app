@@ -5,6 +5,13 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
+import {
+  HomeIcon,
+  UserGroupIcon,
+  UserPlusIcon,
+  TableCellsIcon,
+} from "@heroicons/react/24/outline";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -36,27 +43,31 @@ export default function DashboardLayout({ children }) {
         <nav className="p-4 space-y-2">
           <Link
             href="/dashboard/home"
-            className="block px-3 py-2 rounded hover:bg-gray-700"
+            className="px-3 py-2 rounded hover:bg-gray-700 flex items-center gap-2"
           >
-            Home
+           <HomeIcon className="h-5 w-5 " />
+ Home
           </Link>
           <Link
             href="/dashboard/users"
-            className="block px-3 py-2 rounded hover:bg-gray-700"
+            className="px-3 py-2 rounded hover:bg-gray-700 flex items-center gap-2"
           >
-            Users list
+           <UserGroupIcon className="h-5 w-5" />
+ Users list
           </Link>
           <Link
             href="/dashboard/form"
-            className="block px-3 py-2 rounded hover:bg-gray-700"
+            className="px-3 py-2 rounded hover:bg-gray-700 flex items-center gap-2"
           >
-            Add users
+        <UserPlusIcon className="h-5 w-5" />
+    Add users
           </Link>
           <Link
             href="/dashboard/workTable"
-            className="block px-3 py-2 rounded hover:bg-gray-700"
+            className="px-3 py-2 rounded hover:bg-gray-700 flex items-center gap-2"
           >
-            assigned Work Table
+          <TableCellsIcon className="h-5 w-5" />
+  Assigned Work Table
           </Link>
         </nav>
       </aside>
@@ -64,53 +75,50 @@ export default function DashboardLayout({ children }) {
       {/* Main */}
       <div className="flex-1 md:ml-64 flex flex-col min-h-screen w-full ">
         {/* Header */}
-      <header className="h-16 bg-white border-b px-4 z-50 sticky top-0">
-  <div className="flex items-center h-full gap-4">
-    {/* Left */}
-    <button
-      onClick={() => setOpen(!open)}
-      className="md:hidden inline-flex items-center justify-center rounded-md border px-3 py-2 text-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300"
-      aria-label="Toggle sidebar"
-    >
-      ☰
-    </button>
+        <header className="h-16 bg-white border-b px-4 z-50 sticky top-0">
+          <div className="flex items-center h-full gap-4">
+            {/* Left */}
+            <button
+              onClick={() => setOpen(!open)}
+              className="md:hidden inline-flex items-center justify-center rounded-md border px-3 py-2 text-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300"
+              aria-label="Toggle sidebar"
+            >
+              ☰
+            </button>
 
-    {/* Spacer */}
-    <div className="flex-1" />
+            {/* Spacer */}
+            <div className="flex-1" />
 
-    {/* Right */}
-    <div className="flex items-center gap-3">
-      <span className="hidden sm:block text-sm text-gray-600">
-        Welcome,
-        <span className="ml-1 font-medium text-gray-900">
-          {session?.user?.email
-            ? session.user.email
-            : session?.user?.name || "User"}
-        </span>
-      </span>
+            {/* Right */}
+            <div className="flex items-center gap-3">
+              <span className="hidden sm:block text-sm text-gray-600">
+                Welcome,
+                <span className="ml-1 font-medium text-gray-900">
+                  {session?.user?.email
+                    ? session.user.email
+                    : session?.user?.name || "User"}
+                </span>
+              </span>
 
-      <button
-        onClick={() => signOut({ callbackUrl: "/login" })}
-        className="inline-flex items-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400"
-      >
-        Logout
-      </button>
-    </div>
-  </div>
-</header>
-
-
+              <button
+                onClick={() => signOut({ callbackUrl: "/login" })}
+                className="inline-flex items-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </header>
 
         {/* Content */}
         <main className="flex-1 p-6 bg-gray-100">{children}</main>
 
         {/* Footer */}
         <footer className="h-14 bg-white border-t flex items-center justify-center text-sm text-gray-500">
-  <span>
-    © {new Date().getFullYear()} Next App. All rights reserved.
-  </span>
-</footer>
-
+          <span>
+            © {new Date().getFullYear()} Next App. All rights reserved.
+          </span>
+        </footer>
       </div>
     </div>
   );

@@ -26,10 +26,6 @@ export default function UsersPage() {
   const searchTimeoutRef = useRef(null);
   const usersCacheRef = useRef(new Map());
 
-
-
-
-
   const WORK_OPTIONS = [
     { label: "Branch 1", value: "work1" },
     { label: "Branch 2", value: "work2" },
@@ -59,7 +55,7 @@ export default function UsersPage() {
 
     try {
       const res = await fetch(
-        `/api/users?page=${page}&limit=${limitVal}&search=${searchVal}&sort=${sortVal}`
+        `/api/users?page=${page}&limit=${limitVal}&search=${searchVal}&sort=${sortVal}`,
       );
       const data = await res.json();
       usersCacheRef.current.set(cacheKey, {
@@ -76,7 +72,7 @@ export default function UsersPage() {
       setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     fetchUsers({ page: 1 });
   }, []);
@@ -110,7 +106,7 @@ export default function UsersPage() {
   };
 
   const handleAssignWork = async (userId, work, actionLabel) => {
-   const ok = window.confirm(actionLabel);
+    const ok = window.confirm(actionLabel);
     if (!ok) return;
 
     try {
@@ -127,7 +123,7 @@ export default function UsersPage() {
       if (!res.ok) throw new Error(data.error || "Assign work failed");
 
       setUsers((prev) =>
-        prev.map((u) => (u._id === userId ? { ...u, assignedWork: work } : u))
+        prev.map((u) => (u._id === userId ? { ...u, assignedWork: work } : u)),
       );
 
       usersCacheRef.current.clear();
@@ -283,12 +279,14 @@ export default function UsersPage() {
                   <td className="px-4 py-3">
                     <div className="flex gap-3">
                       {WORK_OPTIONS.map((work) => {
-
-                        const selectedWorks = u.assignedWork?.map((w) => w.name) || [];
+                        const selectedWorks =
+                          u.assignedWork?.map((w) => w.name) || [];
                         const isChecked = selectedWorks.includes(work.value);
 
                         const onToggle = () => {
-                          const updatedWorks = isChecked? selectedWorks.filter((v) => v !== work.value) : [...selectedWorks, work.value];
+                          const updatedWorks = isChecked
+                            ? selectedWorks.filter((v) => v !== work.value)
+                            : [...selectedWorks, work.value];
 
                           const confirmMsg = isChecked
                             ? `Remove ${work.label} from this user?`
@@ -297,7 +295,7 @@ export default function UsersPage() {
                           handleAssignWork(
                             u._id,
                             updatedWorks.map((name) => ({ name })),
-                            confirmMsg
+                            confirmMsg,
                           );
                         };
 
