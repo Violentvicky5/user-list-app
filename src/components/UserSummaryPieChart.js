@@ -6,7 +6,7 @@ const Plot = dynamic(() => import("react-plotly.js"), {
   ssr: false,
 });
 
-export default function UserSummaryPie({ summary }) {
+export default function UserSummaryPieChart({ summary }) {
   const data = [
     {
       type: "pie",
@@ -19,26 +19,25 @@ export default function UserSummaryPie({ summary }) {
       ],
       textinfo: "label+percent",
       hoverinfo: "label+value",
-      hole: 0.3,
     },
   ];
 
   const layout = {
     title: {
       text: "User Work Distribution",
-      xanchor: "center",
       font: { size: 18 },
     },
     legend: {
       orientation: "v",
-      x: 1,
-      yanchor: "top",
-      y: 1,
+      x: 1.2,
+      xanchor: "center",
+      yanchor:"top",
+      y:1,
     },
-    margin: { t: 80, l: 0, r: 0, b: 25 },
-    autosize:false,
-    height: 400,
-    width: 400,
+ margin: { t: 80, l: 0, r: 0, b: 25 },
+ height:400,
+  width:400,
+  autosize:false,
   };
 
   return (

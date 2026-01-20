@@ -4,16 +4,13 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import UserSummaryPie from "@/components/userSummaryPie";
-
+import UserSummaryPieChart from "@/components/UserSummaryPieChart";
 export default function Page() {
   const [summary, setSummary] = useState(null);
 
   const router = useRouter();
 
- 
-const { status } = useSession();
-
-  
+  const { status } = useSession();
 
   useEffect(() => {
     const fetchSummary = async () => {
@@ -23,20 +20,17 @@ const { status } = useSession();
     };
     fetchSummary();
   }, []);
-if (status === "loading") return null;
+  if (status === "loading") return null;
 
   if (!summary) return <p>Loading...</p>;
 
-  const card =
-    "rounded-xl shadow-lg p-5 text-white flex flex-col items-center";
+  const card = "rounded-xl shadow-lg p-5 text-white flex flex-col items-center";
 
   return (
     <>
       <h2 className="text-3xl font-semibold mb-6">Dashboard</h2>
-    
-     
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
-    
         <div
           className={`${card} bg-emerald-500 cursor-pointer hover:opacity-90`}
           onClick={() => router.push("/dashboard/users")}
@@ -66,10 +60,28 @@ if (status === "loading") return null;
         </div>
       </div>
 
-      {/* PIE CHART */}
-      <div className="bg-white rounded-xl shadow-lg p-5">
+      
+      {/* CHART */}
+<div className="bg-white rounded-xl p-2 md:mt-0">
+  <div className="rounded-xl shadow-md p-5">
+    <div className="flex flex-col md:flex-row gap-6 justify-evenly items-center">
+
+      <div className="w-full max-w-105 min-w-70 md:h-105 aspect-square md:aspect-auto">
         <UserSummaryPie summary={summary} />
       </div>
+
+      <div className="w-full max-w-105 min-w-70 md:h-105 aspect-square md:aspect-auto">
+        <UserSummaryPieChart summary={summary} />
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
     </>
   );
 }

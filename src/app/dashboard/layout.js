@@ -48,29 +48,25 @@ export default function DashboardLayout({ children }) {
             href="/dashboard/home"
             className="px-3 py-2 rounded hover:bg-gray-700 flex items-center gap-2"
           >
-           <HomeIcon className="h-5 w-5 " />
- Home
+           <HomeIcon className="h-5 w-5 " /> Home
           </Link>
           <Link
             href="/dashboard/users"
             className="px-3 py-2 rounded hover:bg-gray-700 flex items-center gap-2"
           >
-           <UserGroupIcon className="h-5 w-5" />
- Users list
+           <UserGroupIcon className="h-5 w-5" /> Users list
           </Link>
           <Link
             href="/dashboard/form"
             className="px-3 py-2 rounded hover:bg-gray-700 flex items-center gap-2"
           >
-        <UserPlusIcon className="h-5 w-5" />
-    Add users
+        <UserPlusIcon className="h-5 w-5" /> Add users
           </Link>
           <Link
             href="/dashboard/workTable"
             className="px-3 py-2 rounded hover:bg-gray-700 flex items-center gap-2"
           >
-          <TableCellsIcon className="h-5 w-5" />
-  Assigned Work Table
+          <TableCellsIcon className="h-5 w-5" /> Assigned Work Table
           </Link>
         </nav>
       </aside>
@@ -114,10 +110,10 @@ export default function DashboardLayout({ children }) {
         </header>
 
         {/* Content */}
-        <main className="flex-1 p-6 bg-gray-100">{children}</main>
+        <main className="flex-1 p-6 bg-gray-100 min-h-[calc(100vh-4rem-3.5rem)]">{children}</main>
 
         {/* Footer */}
-        <footer className="h-14 bg-white border-t flex items-center justify-center text-sm text-gray-500">
+        <footer className="h-14 bg-white border-t flex items-center justify-center text-sm text-gray-500 ">
           <span>
             © {new Date().getFullYear()} Next App. All rights reserved.
           </span>
