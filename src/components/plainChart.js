@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
-export default function UserSummaryPieChart() {
+export default function PlainChart() {
   const data = [
     {
       type: "pie",
@@ -19,34 +19,30 @@ export default function UserSummaryPieChart() {
         "Vivaldi","Samsung Internet","UC Browser","Tor",
         "Internet Explorer","DuckDuckGo","Yandex","Maxthon",
         "Pale Moon","QQ Browser","Sogou","Baidu","Whale","Other"
-      ],
-      textinfo: "label+percent",
-      hoverinfo: "label+value",
+      ],  hoverinfo: "label+value",
+      textinfo: "none", 
     },
   ];
 
- const layout = {
-  title: {
-    text: "User Work Distribution",
-    font: { size: 18 },
-  },
-  showlegend: false,
-  margin: { t: 70, l: 0, r: 0, b: 40 },
-  autosize: true,           
-  width: undefined,         
-  height: undefined,      
- // paper_bgcolor: "lightgray",
-};
-
+  const layout = {
+    title: {
+      text: "Compact Chart",
+      font: { size: 12 }, 
+    },
+    showlegend: false,
+    autosize: true,        
+    margin: { t: 30, l: 0, r: 0, b: 30 }, 
+    width: 180,              
+    height: 300,            
+    paper_bgcolor: "transparent",
+  };
 
   return (
     <Plot
       data={data}
       layout={layout}
       config={{
-        displayModeBar: true,
-        displaylogo: false,
-       
+        displayModeBar: false, 
       }}
       style={{ width: "100%", height: "100%" }}
     />

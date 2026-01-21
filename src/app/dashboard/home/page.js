@@ -3,13 +3,15 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { CameraIcon } from "@heroicons/react/24/outline";
+
 import UserSummaryPie from "@/components/userSummaryPie";
 import UserSummaryPieChart from "@/components/UserSummaryPieChart";
+import SimplifiedPieChart from "@/components/SimplifiedPieChart";
+
 export default function Page() {
   const [summary, setSummary] = useState(null);
-
   const router = useRouter();
-
   const { status } = useSession();
 
   useEffect(() => {
@@ -20,68 +22,102 @@ export default function Page() {
     };
     fetchSummary();
   }, []);
-  if (status === "loading") return null;
 
+  if (status === "loading") return null;
   if (!summary) return <p>Loading...</p>;
 
-  const card = "rounded-xl shadow-lg p-5 text-white flex flex-col items-center";
+  const card = "rounded-xl p-4 sm:p-5 text-white flex flex-col items-center";
 
   return (
-    <>
-      <h2 className="text-3xl font-semibold mb-6">Dashboard</h2>
+    <div className="space-y-6 w-full">
+      {/* Title */}
+      <h2 className="text-2xl sm:text-3xl font-semibold">Dashboard</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
+      {/* Stats cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         <div
           className={`${card} bg-emerald-500 cursor-pointer hover:opacity-90`}
           onClick={() => router.push("/dashboard/users")}
         >
-          <p>Total Users</p>
-          <p className="text-3xl font-bold">{summary.totalUsers}</p>
+          <p className="text-sm sm:text-base">Total Users</p>
+          <p className="text-2xl sm:text-3xl font-bold">{summary.totalUsers}</p>
         </div>
 
         <div className={`${card} bg-teal-500`}>
-          <p>Work 1</p>
-          <p className="text-3xl font-bold">{summary.workCounts.work1}</p>
+          <p className="text-sm sm:text-base">Work 1</p>
+          <p className="text-2xl sm:text-3xl font-bold">
+            {summary.workCounts.work1}
+          </p>
         </div>
 
         <div className={`${card} bg-sky-500`}>
-          <p>Work 2</p>
-          <p className="text-3xl font-bold">{summary.workCounts.work2}</p>
+          <p className="text-sm sm:text-base">Work 2</p>
+          <p className="text-2xl sm:text-3xl font-bold">
+            {summary.workCounts.work2}
+          </p>
         </div>
 
         <div className={`${card} bg-blue-500`}>
-          <p>Work 3</p>
-          <p className="text-3xl font-bold">{summary.workCounts.work3}</p>
+          <p className="text-sm sm:text-base">Work 3</p>
+          <p className="text-2xl sm:text-3xl font-bold">
+            {summary.workCounts.work3}
+          </p>
         </div>
 
         <div className={`${card} bg-violet-500`}>
-          <p>Unassigned</p>
-          <p className="text-3xl font-bold">{summary.unAssignedUsers}</p>
+          <p className="text-sm sm:text-base">Unassigned</p>
+          <p className="text-2xl sm:text-3xl font-bold">
+            {summary.unAssignedUsers}
+          </p>
         </div>
       </div>
 
-      
-      {/* CHART */}
-<div className="bg-white rounded-xl p-2 md:mt-0">
-  <div className="rounded-xl shadow-md p-5">
-    <div className="flex flex-col md:flex-row gap-6 justify-evenly items-center">
+      {/* Charts: Donut + Camera + Pie */}
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 items-center w-full">
+        {/* Donut chart */}
+        <div className="bg-white rounded-xl p-3 sm:p-4 flex-1 flex justify-center items-center min-h-[280px] sm:min-h-[380px] w-full">
+          <UserSummaryPie />
+        </div>
 
-      <div className="w-full max-w-105 min-w-70 md:h-105 aspect-square md:aspect-auto">
-        <UserSummaryPie summary={summary} />
+       
+
+        {/* Pie chart */}
+        <div className="bg-white rounded-xl p-3 sm:p-4 flex-1 flex justify-center items-center min-h-[280px] sm:min-h-[380px] w-full">
+          <UserSummaryPieChart />
+        </div>
       </div>
 
-      <div className="w-full max-w-105 min-w-70 md:h-105 aspect-square md:aspect-auto">
-        <UserSummaryPieChart summary={summary} />
+      {/* Simplified Pie Chart */}
+      <div className="bg-white rounded-xl shadow-md p-2 w-full max-w-[400px] h-[300px] mx-auto">
+        <SimplifiedPieChart
+          values={[
+            120, 90, 75, 60, 150, 110, 95, 80, 70, 65, 140, 100, 85, 55, 55,
+            130, 105, 98, 88, 100,
+          ]}
+          labels={[
+            "Chrome",
+            "Firefox",
+            "Edge",
+            "Safari",
+            "Brave",
+            "Opera",
+            "Vivaldi",
+            "Samsung Internet",
+            "UC Browser",
+            "Tor",
+            "Internet Explorer",
+            "DuckDuckGo",
+            "Yandex",
+            "Maxthon",
+            "Pale Moon",
+            "QQ Browser",
+            "Sogou",
+            "Baidu",
+            "Whale",
+            "Other",
+          ]}
+        />
       </div>
-
     </div>
-  </div>
-</div>
-
-
-
-
-
-    </>
   );
 }
