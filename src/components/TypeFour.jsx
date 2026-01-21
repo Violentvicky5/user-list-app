@@ -6,7 +6,7 @@ import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
-export default function SimplifiedPieChart({ labels = [], values = [] }) {
+export default function TypeFour({ labels = [], values = [] }) {
   // Prepare data -useMemo to avoid recalculations
   const data = useMemo(
     () =>
@@ -65,6 +65,7 @@ export default function SimplifiedPieChart({ labels = [], values = [] }) {
               values: visibleData.map(d => d.value),
               text: visibleData.map(d => `${d.percent.toFixed(1)}%`),
                textfont: { size: 9 },
+  insidetextorientation: "radial",
               textinfo: "text",
               hovertemplate: "%{label}: %{text}<extra></extra>",
               marker: { colors: colors.filter((_, i) => visible.has(enriched[i].label)) }, //only include colors for visible labels
@@ -72,7 +73,7 @@ export default function SimplifiedPieChart({ labels = [], values = [] }) {
             },
           ]}
           layout={{
-            title: { text: "type 2", font: { size: 16 } },
+            title: { text: "type 3", font: { size: 16 } },
             showlegend: false,
             margin: { t: 35, b: 0, l: 0, r: 0 },
             autosize: true,
@@ -80,16 +81,15 @@ export default function SimplifiedPieChart({ labels = [], values = [] }) {
           }}
           config={{
             responsive: true,
-            displayModeBar: true, 
-            displaylogo: false,
+            displayModeBar: false, 
+            
           }}
           style={{ width: "100%", height: "100%" }}
         />
       </div>
 
       {/* Legend dropdown */}
-      <details className="relative shrink-0">
-        
+      <details className="relative shrink-0 self-end">
         <summary className="list-none cursor-pointer p-1 rounded hover:bg-gray-100 flex items-center">
           <AdjustmentsHorizontalIcon className="w-4 h-4 text-gray-600" />
         </summary>

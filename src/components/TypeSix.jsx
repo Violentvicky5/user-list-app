@@ -4,12 +4,12 @@ import dynamic from "next/dynamic";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
-export default function PlainChart() {
+export default function UserSummaryPieChart() {
   const data = [
     {
       type: "pie",
       values: [
-        120, 90, 75, 60, 150,
+        120, 90, 85, 60, 150,
         110, 95, 80, 70, 65,
         140, 100, 85, 55, 55,
         130, 105, 98, 88, 50
@@ -19,30 +19,38 @@ export default function PlainChart() {
         "Vivaldi","Samsung Internet","UC Browser","Tor",
         "Internet Explorer","DuckDuckGo","Yandex","Maxthon",
         "Pale Moon","QQ Browser","Sogou","Baidu","Whale","Other"
-      ],  hoverinfo: "label+value",
-      textinfo: "none", 
+      ],
+      textinfo: "label",
+      textposition: "inside",
+      hoverinfo: "label+value+percent",
+      textfont: { size: 8, color: "black" },
+      textorientation: "radial",
+      pull:0.035,
     },
   ];
 
-  const layout = {
-    title: {
-      text: "type 1",
-      font: { size: 22 }, 
-    },
-    showlegend: false,
-    autosize: true,        
-    margin: { t: 30, l: 0, r: 0, b:0 }, 
-    width: 180,              
-    height: 300,            
-  //  paper_bgcolor: "lightgray",
-  };
+ const layout = {
+  title: {
+    text: "Type 6",
+    font: { size: 18 },
+  },
+  showlegend: false,
+  margin: { t: 30, l: 0, r: 0, b: 0 },
+  autosize: true,           
+  width: undefined,         
+  height: undefined,      
+ // paper_bgcolor: "lightgray",
+};
+
 
   return (
     <Plot
       data={data}
       layout={layout}
       config={{
-        displayModeBar: false, 
+        displayModeBar: true,
+        displaylogo: false,
+       
       }}
       style={{ width: "100%", height: "100%" }}
     />

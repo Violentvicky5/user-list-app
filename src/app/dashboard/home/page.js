@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { CameraIcon } from "@heroicons/react/24/outline";
-
+import PlainChart from "@/components/plainChart";
 import UserSummaryPie from "@/components/userSummaryPie";
 import UserSummaryPieChart from "@/components/UserSummaryPieChart";
 import SimplifiedPieChart from "@/components/SimplifiedPieChart";
-
+import TypeFour from "@/components/TypeFour";
+import TypeFive from "@/components/TypeFive";
+import TypeSix from "@/components/TypeSix";
+import TypeSeven from "@/components/TypeSeven";
 export default function Page() {
   const [summary, setSummary] = useState(null);
   const router = useRouter();
@@ -71,24 +73,16 @@ export default function Page() {
           </p>
         </div>
       </div>
-
-      {/* Charts: Donut + Camera + Pie */}
-      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 items-center w-full">
-        {/* Donut chart */}
-        <div className="bg-white rounded-xl p-3 sm:p-4 flex-1 flex justify-center items-center min-h-[280px] sm:min-h-[380px] w-full">
-          <UserSummaryPie />
-        </div>
-
-       
-
-        {/* Pie chart */}
-        <div className="bg-white rounded-xl p-3 sm:p-4 flex-1 flex justify-center items-center min-h-[280px] sm:min-h-[380px] w-full">
-          <UserSummaryPieChart />
+      <div className="flex justify-center items-center">
+        {/* type 1*/}
+        <div>
+          <PlainChart />
         </div>
       </div>
 
-      {/* Simplified Pie Chart */}
-      <div className="bg-white rounded-xl shadow-md p-2 w-full max-w-[400px] h-[300px] mx-auto">
+      {/* type 2*/}
+
+      <div className="bg-white rounded-xl shadow-md p-2 w-full max-w-[300px] h-[300px] mx-auto">
         <SimplifiedPieChart
           values={[
             120, 90, 75, 60, 150, 110, 95, 80, 70, 65, 140, 100, 85, 55, 55,
@@ -117,6 +111,89 @@ export default function Page() {
             "Other",
           ]}
         />
+      </div>
+      {/* type 3*/}
+      <div className="bg-white rounded-xl shadow-md p-2 w-full max-w-[300px] h-[300px] mx-auto">
+        <TypeFour
+          values={[
+            120, 90, 75, 60, 150, 110, 95, 80, 70, 65, 140, 100, 85, 55, 55,
+            130, 105, 98, 88, 100,
+          ]}
+          labels={[
+            "Chrome",
+            "Firefox",
+            "Edge",
+            "Safari",
+            "Brave",
+            "Opera",
+            "Vivaldi",
+            "Samsung Internet",
+            "UC Browser",
+            "Tor",
+            "Internet Explorer",
+            "DuckDuckGo",
+            "Yandex",
+            "Maxthon",
+            "Pale Moon",
+            "QQ Browser",
+            "Sogou",
+            "Baidu",
+            "Whale",
+            "Other",
+          ]}
+        />
+      </div>
+      {/* type 4*/}
+
+      <div className="bg-white rounded-xl shadow-md p-2 w-full max-w-[300px] h-[300px] mx-auto">
+        <TypeFive
+          values={[
+            120, 90, 75, 60, 150, 110, 95, 80, 70, 65, 140, 100, 85, 55, 55,
+            130, 105, 98, 88, 100,
+          ]}
+          labels={[
+            "Chrome",
+            "Firefox",
+            "Edge",
+            "Safari",
+            "Brave",
+            "Opera",
+            "Vivaldi",
+            "Samsung Internet",
+            "UC Browser",
+            "Tor",
+            "Internet Explorer",
+            "DuckDuckGo",
+            "Yandex",
+            "Maxthon",
+            "Pale Moon",
+            "QQ Browser",
+            "Sogou",
+            "Baidu",
+            "Whale",
+            "Other",
+          ]}
+        />
+      </div>
+
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 items-center w-full">
+        {/* type 5*/}
+
+        <div className="bg-white rounded-xl shadow-md p-2 w-full max-w-[200px] h-[300px] mx-auto">
+          <UserSummaryPieChart />
+        </div>
+        {/* type 6*/}
+        <div className="bg-white rounded-xl shadow-md p-2 w-full max-w-[200px] h-[300px] mx-auto">
+          <TypeSix />
+        </div>
+      </div>
+      {/* type 7*/}
+      <div className="bg-white rounded-xl p-3 sm:p-4 flex-1 flex justify-center items-center w-full max-w-[350px] h-[350px] mx-auto">
+        <UserSummaryPie />
+      </div>
+      {/* type 8*/}
+      <div className="bg-white rounded-xl p-3 sm:p-4 flex-1 flex justify-center items-center w-full max-w-[350px] h-[350px] mx-auto">
+        <TypeSeven />
       </div>
     </div>
   );

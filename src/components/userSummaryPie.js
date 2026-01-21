@@ -10,7 +10,7 @@ export default function UserSummaryPie() {
       type: "pie",
 
       values: [
-        120, 90, 75, 60, 150, 110, 95, 80, 70, 65, 140, 100, 85, 55, 55, 130,
+        120, 90, 79, 60, 150, 110, 95, 80, 70, 65, 140, 100, 85, 55, 55, 130,
         105, 98, 88, 50,
       ],
       labels: [
@@ -35,23 +35,25 @@ export default function UserSummaryPie() {
         "Whale",
         "Other",
       ],
-      hole: 0.3,
+      
       textinfo: "label",
-      hoverinfo: "label+value",
+      textposition: "outside",
+      hoverinfo: "label+value+percent",
+        domain: { x: [0.05, 0.75], y: [0.35, 0.75] }, // shrink pie to center
     },
   ];
 
  const layout = {
   title: {
-    text: "User Work Distribution",
+    text: "Type 7",
     font: { size: 18 },
   },
   showlegend: false,
-  margin: { t: 60, l: 0, r: 0, b: 40 },
-  autosize: true,          
-  width: undefined,         
-  height: undefined,        
-//  paper_bgcolor: "lightgray", 
+  margin: { t: 30, l: 25, r: 10, b: 10 },
+  autosize: false,          
+  width: 280,         
+  height: 250,        
+  paper_bgcolor: "lightgray", 
 };
 
 

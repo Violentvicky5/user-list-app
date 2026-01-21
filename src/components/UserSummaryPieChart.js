@@ -9,7 +9,7 @@ export default function UserSummaryPieChart() {
     {
       type: "pie",
       values: [
-        120, 90, 75, 60, 150,
+        120, 90, 85, 60, 150,
         110, 95, 80, 70, 65,
         140, 100, 85, 55, 55,
         130, 105, 98, 88, 50
@@ -20,18 +20,22 @@ export default function UserSummaryPieChart() {
         "Internet Explorer","DuckDuckGo","Yandex","Maxthon",
         "Pale Moon","QQ Browser","Sogou","Baidu","Whale","Other"
       ],
-      textinfo: "label+percent",
-      hoverinfo: "label+value",
+      textinfo: "label",
+      textposition: "inside",
+      hoverinfo: "label+value+percent",
+      textfont: { size: 8, color: "black" },
+      textorientation: "radial",
+    //  pull:0.1,
     },
   ];
 
  const layout = {
   title: {
-    text: "User Work Distribution",
+    text: "Type 5",
     font: { size: 18 },
   },
   showlegend: false,
-  margin: { t: 70, l: 0, r: 0, b: 40 },
+  margin: { t: 30, l: 0, r: 0, b: 0 },
   autosize: true,           
   width: undefined,         
   height: undefined,      
