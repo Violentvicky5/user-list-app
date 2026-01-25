@@ -39,7 +39,7 @@ export default function UserSummaryPieChart() {
   autosize: true,           
   width: undefined,         
   height: undefined,      
- // paper_bgcolor: "lightgray",
+  paper_bgcolor: "lightgray",
 };
 
 

@@ -6,7 +6,7 @@ import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
-export default function TypeFour({ labels = [], values = [] }) {
+export default function TypeFive({ labels = [], values = [] }) {
   // Prepare data -useMemo to avoid recalculations
   const data = useMemo(
     () =>

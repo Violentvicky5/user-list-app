@@ -68,7 +68,7 @@ export default function SimplifiedPieChart({ labels = [], values = [] }) {
               textinfo: "text",
               hovertemplate: "%{label}: %{text}<extra></extra>",
               marker: { colors: colors.filter((_, i) => visible.has(enriched[i].label)) }, //only include colors for visible labels
-            pull: 0,
+            pull: 0,  
             },
           ]}
           layout={{
@@ -77,6 +77,7 @@ export default function SimplifiedPieChart({ labels = [], values = [] }) {
             margin: { t: 35, b: 0, l: 0, r: 0 },
             autosize: true,
           //  paper_bgcolor: "lightgray",
+          
           }}
           config={{
             responsive: true,

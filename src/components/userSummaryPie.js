@@ -38,6 +38,7 @@ export default function UserSummaryPie() {
       
       textinfo: "label",
       textposition: "outside",
+       textfont: { size: 11, color: "black" },
       hoverinfo: "label+value+percent",
         domain: { x: [0.05, 0.75], y: [0.35, 0.75] }, // shrink pie to center
     },

@@ -45,9 +45,9 @@ export const authOptions = {
         token.createdAt = Date.now();
       }
 
-const fifteenMinutes = 15 * 60 * 1000; // 900000 ms
-
-      if (Date.now() - token.createdAt > fifteenMinutes) {
+// const fifteenMinutes = 15 * 60 * 1000; // 900000 ms
+const oneday = 24 * 60 * 60 * 1000; // 86400000 ms
+      if (Date.now() - token.createdAt > oneday) {
         return null;
       }
 
