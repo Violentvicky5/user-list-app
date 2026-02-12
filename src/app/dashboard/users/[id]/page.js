@@ -38,57 +38,74 @@ export default function UserDetailPage() {
   if (error) return <p className="p-4 text-red-500">{error}</p>;
   if (!user) return <p className="p-4 text-gray-500">User not found</p>;
 
-  return (
-    <div>
-      <Breadcrumb usernameMap={usernameMap} />
-    <div className="max-w-3xl mx-auto mt-10 p-4 border rounded">
-      
+  
+   return (
+  <div className="text-black dark:text-white">
+    <Breadcrumb usernameMap={usernameMap} />
 
-      <h1 className="text-2xl font-semibold mb-4">User Details</h1>
-      <p><strong>Name:</strong> {user.name}</p>
-      <p><strong>Email:</strong> {user.email}</p>
-      <p><strong>Created At:</strong> {new Date(user.createdAt).toLocaleString()}</p>
+    <div className="max-w-3xl mx-auto mt-10 p-4 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800">
+      <h1 className="text-2xl font-semibold mb-4">
+        User Details
+      </h1>
 
-     <div className="mt-4">
-  <h2 className="font-medium mb-2">Assigned Work</h2>
+      <p>
+        <strong>Name:</strong> {user.name}
+      </p>
+      <p>
+        <strong>Email:</strong> {user.email}
+      </p>
+      <p>
+        <strong>Created At:</strong>{" "}
+        {new Date(user.createdAt).toLocaleString()}
+      </p>
 
-  {user.assignedWork && user.assignedWork.length > 0 ? (
-    user.assignedWork.map((work, index) => {
-      const assignedAt = work.assignedAt
-        ? new Date(work.assignedAt).toLocaleString()
-        : "N/A";
-      const workId = work.workId || "N/A";
+      <div className="mt-4">
+        <h2 className="font-medium mb-2">Assigned Work</h2>
 
-      return (
-        <div
-          key={index}
-          className="border rounded p-3 mb-2 bg-gray-50"
-        >
-          <p>
-            <strong>Work Name:</strong> {work.name}
+        {user.assignedWork && user.assignedWork.length > 0 ? (
+          user.assignedWork.map((work, index) => {
+            const assignedAt = work.assignedAt
+              ? new Date(work.assignedAt).toLocaleString()
+              : "N/A";
+            const workId = work.workId || "N/A";
+
+            return (
+              <div
+                key={index}
+                className="border rounded p-3 mb-2 
+                           bg-gray-50 dark:bg-gray-700 
+                           border-gray-300 dark:border-gray-600"
+              >
+                <p>
+                  <strong>Work Name:</strong> {work.name}
+                </p>
+                <p>
+                  <strong>Assigned At:</strong> {assignedAt}
+                </p>
+                <p>
+                  <strong>Work ID:</strong> {workId}
+                </p>
+              </div>
+            );
+          })
+        ) : (
+          <p className="text-gray-500 dark:text-gray-400">
+            No assigned work
           </p>
-          <p>
-            <strong>Assigned At:</strong> {assignedAt}
-          </p>
-          <p>
-            <strong>Work ID:</strong> {workId}
-          </p>
-        </div>
-      );
-    })
-  ) : (
-    <p>No assigned work</p>
-  )}
-</div>
-
+        )}
+      </div>
 
       <button
         onClick={() => router.back()}
-        className="mt-6 px-3 py-2 bg-blue-600 text-white rounded"
+        className="mt-6 px-3 py-2 
+                   bg-blue-600 hover:bg-blue-700 
+                   text-white rounded"
       >
         Back
       </button>
     </div>
   </div>
-  );
+);
+
+  
 }

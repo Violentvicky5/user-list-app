@@ -1,11 +1,11 @@
-
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Breadcrumb from "@/components/BreadCrumb";
-
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 export default function AddUserForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -53,7 +53,7 @@ export default function AddUserForm() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+    <div className="max-w-md mx-auto mt-10 p-6 bg-gray-200 dark:bg-gray-900 rounded-4xl  shadow text-black dark:text-white">
       {/* Breadcrumb */}
       <Breadcrumb />
 
@@ -62,7 +62,9 @@ export default function AddUserForm() {
       {message && (
         <p
           className={`mb-4 ${
-            message.includes("success") ? "text-green-600" : "text-red-600"
+            message.includes("success")
+              ? "text-green-600 dark:text-green-400"
+              : "text-red-600 dark:text-red-400"
           }`}
         >
           {message}
@@ -72,47 +74,51 @@ export default function AddUserForm() {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
           <label className="block mb-1 font-medium">Name</label>
-          <input
+          <Input
             type="text"
             value={name}
+            placeholder="Enter your name"
             onChange={(e) => {
               setName(e.target.value);
               setInputStatus(null);
               setMessage("");
             }}
-            className={`w-full rounded px-3 py-2 focus:outline-none focus:ring-2 ${
-              inputStatus === "error"
-                ? "border border-red-500 focus:ring-red-400"
-                : "border border-gray-300 focus:ring-blue-500"
-            }`}
+            className={`w-full rounded px-3 py-2 focus:outline-none focus:ring-2
+              ${
+                inputStatus === "error"
+                  ? "border border-red-500 focus:ring-red-400 placeholder-red-300 dark:placeholder-red-400 dark:border-red-400"
+                  : "border border-gray-300 focus:ring-blue-500 placeholder-gray-400 dark:border-gray-600 dark:placeholder-gray-500 bg-white dark:bg-gray-800 text-black dark:text-white"
+              }`}
           />
         </div>
 
         <div>
           <label className="block mb-1 font-medium">Email</label>
-          <input
+          <Input
             type="email"
             value={email}
+            placeholder="Enter your email"
             onChange={(e) => {
               setEmail(e.target.value);
               setInputStatus(null);
               setMessage("");
             }}
-            className={`w-full rounded px-3 py-2 focus:outline-none focus:ring-2 ${
-              inputStatus === "error"
-                ? "border border-red-500 focus:ring-red-400"
-                : "border border-gray-300 focus:ring-blue-500"
-            }`}
+            className={`w-full rounded px-3 py-2 focus:outline-none focus:ring-2
+              ${
+                inputStatus === "error"
+                  ? "border border-red-500 focus:ring-red-400 placeholder-red-300 dark:placeholder-red-400 dark:border-red-400"
+                  : "border border-gray-300 focus:ring-blue-500 placeholder-gray-400 dark:border-gray-600 dark:placeholder-gray-500 bg-white dark:bg-gray-800 text-black dark:text-white"
+              }`}
           />
         </div>
 
-        <button
+        <Button
           type="submit"
           disabled={loading}
           className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:opacity-50"
         >
           {loading ? "Submitting..." : "Submit"}
-        </button>
+        </Button>
       </form>
     </div>
   );

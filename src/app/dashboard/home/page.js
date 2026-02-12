@@ -77,133 +77,63 @@ export default function Page() {
             </p>
           </div>
         </div>
-        <div className="flex justify-center items-center">
-          {/* type 1*/}
-          <div>
-            <PlainChart />
-          </div>
-        </div>
+       {/* Charts Grid */}
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  
+  <div className="bg-card rounded-xl shadow-sm p-4 h-[320px] flex items-center justify-center">
+    <PlainChart />
+  </div>
 
-        {/* type 2*/}
+  <div className="bg-card rounded-xl shadow-sm p-4 h-[320px] flex items-center justify-center">
+    <SimplifiedPieChart
+      values={[120, 90, 75, 60, 150, 110, 95, 80, 70, 65, 140, 100, 85, 55, 55,
+        130, 105, 98, 88, 100]}
+      labels={[
+        "Chrome","Firefox","Edge","Safari","Brave","Opera","Vivaldi",
+        "Samsung Internet","UC Browser","Tor","Internet Explorer",
+        "DuckDuckGo","Yandex","Maxthon","Pale Moon","QQ Browser",
+        "Sogou","Baidu","Whale","Other",
+      ]}
+    />
+  </div>
 
-        <div className="bg-white rounded-xl shadow-md p-2 w-full max-w-[250px] h-[300px] mx-auto">
-          <SimplifiedPieChart
-            values={[
-              120, 90, 75, 60, 150, 110, 95, 80, 70, 65, 140, 100, 85, 55, 55,
-              130, 105, 98, 88, 100,
-            ]}
-            labels={[
-              "Chrome",
-              "Firefox",
-              "Edge",
-              "Safari",
-              "Brave",
-              "Opera",
-              "Vivaldi",
-              "Samsung Internet",
-              "UC Browser",
-              "Tor",
-              "Internet Explorer",
-              "DuckDuckGo",
-              "Yandex",
-              "Maxthon",
-              "Pale Moon",
-              "QQ Browser",
-              "Sogou",
-              "Baidu",
-              "Whale",
-              "Other",
-            ]}
-          />
-        </div>
-        {/* type 3*/}
-        <div className="bg-white rounded-xl shadow-md p-2 w-full max-w-[300px] h-[300px] mx-auto">
-          <TypeFour
-            values={[
-              120, 90, 75, 60, 150, 110, 95, 80, 70, 65, 140, 100, 85, 55, 55,
-              130, 105, 98, 88, 100,
-            ]}
-            labels={[
-              "Chrome",
-              "Firefox",
-              "Edge",
-              "Safari",
-              "Brave",
-              "Opera",
-              "Vivaldi",
-              "Samsung Internet",
-              "UC Browser",
-              "Tor",
-              "Internet Explorer",
-              "DuckDuckGo",
-              "Yandex",
-              "Maxthon",
-              "Pale Moon",
-              "QQ Browser",
-              "Sogou",
-              "Baidu",
-              "Whale",
-              "Other",
-            ]}
-          />
-        </div>
-        {/* type 4*/}
+  <div className="bg-card rounded-xl shadow-sm p-4 h-[320px] flex items-center justify-center">
+    <TypeFour
+      values={[120, 90, 75, 60, 150, 110, 95, 80, 70, 65, 140, 100, 85, 55, 55,
+        130, 105, 98, 88, 100]}
+      labels={[
+        "Chrome","Firefox","Edge","Safari","Brave","Opera","Vivaldi",
+        "Samsung Internet","UC Browser","Tor","Internet Explorer",
+        "DuckDuckGo","Yandex","Maxthon","Pale Moon","QQ Browser",
+        "Sogou","Baidu","Whale","Other",
+      ]}
+    />
+  </div>
 
-        <div className="bg-white rounded-xl shadow-md p-2 w-full max-w-[300px] h-[300px] mx-auto">
-          <TypeFive
-            values={[
-              120, 90, 75, 60, 150, 110, 95, 80, 70, 65, 140, 100, 85, 55, 55,
-              130, 105, 98, 88, 100,
-            ]}
-            labels={[
-              "Chrome",
-              "Firefox",
-              "Edge",
-              "Safari",
-              "Brave",
-              "Opera",
-              "Vivaldi",
-              "Samsung Internet",
-              "UC Browser",
-              "Tor",
-              "Internet Explorer",
-              "DuckDuckGo",
-              "Yandex",
-              "Maxthon",
-              "Pale Moon",
-              "QQ Browser",
-              "Sogou",
-              "Baidu",
-              "Whale",
-              "Other",
-            ]}
-          />
-        </div>
+  
 
-        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 items-center w-full">
-          {/* type 5*/}
+  <div className="bg-card rounded-xl shadow-sm p-4 h-[320px] flex items-center justify-center">
+    <UserSummaryPieChart />
+  </div>
 
-          <div className="bg-white rounded-xl shadow-md p-2 w-full max-w-[200px] h-[300px] mx-auto">
-            <UserSummaryPieChart />
-          </div>
-          
-          {/* type 6*/}
-          <div className="bg-white rounded-xl shadow-md p-2 w-full max-w-[200px] h-[250px] mx-auto">
-            <TypeSix />
-          </div>
-        </div>
-        {/* type 7*/}
-        <div className="bg-white rounded-xl p-3 sm:p-4 flex-1 flex justify-center items-center w-full max-w-[350px] h-[350px] mx-auto">
-          <UserSummaryPie />
-        </div>
+
+
+  <div className="bg-card rounded-xl shadow-sm p-4 h-[320px] flex items-center justify-center">
+    <UserSummaryPie />
+  </div>
+
+  <div className="bg-card rounded-xl shadow-sm p-4 h-[320px] flex items-center justify-center">
+    <TypeSeven />
+  </div>
+
+  <div className="bg-card rounded-xl shadow-sm p-4 h-[320px] flex items-center justify-center">
+    <TypeNine />
+  </div>
+
+</div>
+
       </div>
-      {/* type 8*/}
-      <div className="bg-white rounded-xl p-3 sm:p-4 flex-1 flex justify-center items-center w-full max-w-[350px] h-[350px] mx-auto">
-        <TypeSeven />
-      </div>
-       <div className="bg-white rounded-xl p-3 sm:p-4 flex-1 flex justify-center items-center w-full max-w-[350px] h-[350px] mx-auto">
-        <TypeNine />
-      </div>
+      
     </div>
   );
 }

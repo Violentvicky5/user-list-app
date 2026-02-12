@@ -46,20 +46,29 @@ export default function Breadcrumb({ usernameMap }) {
   });
 
   return (
-    <nav className="flex items-center text-sm mb-4 space-x-1 text-gray-600">
+    <nav className="flex items-center text-sm mb-4 space-x-1 text-gray-600 dark:text-gray-300">
       {crumbs.map((crumb, idx) => {
         const isLast = idx === crumbs.length - 1;
         return (
           <span key={crumb.href} className="flex items-center gap-1">
-            {crumb.Icon && <crumb.Icon className="h-4 w-4" />}
+            {crumb.Icon && (
+              <crumb.Icon className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+            )}
             {isLast ? (
-              <span className="font-medium text-gray-900">{crumb.label}</span>
+              <span className="font-medium text-gray-900 dark:text-gray-100">
+                {crumb.label}
+              </span>
             ) : (
-              <Link href={crumb.href} className="hover:underline">
+              <Link
+                href={crumb.href}
+                className="hover:underline text-gray-600 dark:text-gray-300"
+              >
                 {crumb.label}
               </Link>
             )}
-            {!isLast && <span className="mx-1">/</span>}
+            {!isLast && (
+              <span className="mx-1 text-gray-400 dark:text-gray-500">/</span>
+            )}
           </span>
         );
       })}
